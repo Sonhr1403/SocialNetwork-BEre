@@ -134,7 +134,32 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-
+    @PutMapping("/users/change-password/{id}")
+    public ResponseEntity<User> updateUserPassword(@PathVariable Long id, @RequestBody User user,@RequestParam String oldPassword) {
+        Optional<User> userOptional = this.userService.findById(id);
+        if (!userOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        oldPassword = passwordEncoder.encode(oldPassword);
+        if (oldPassword.equals(userOptional.get().getPassword())){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        user.setId(userOptional.get().getId());
+        user.setUsername(userOptional.get().getUsername());
+        user.setEnabled(userOptional.get().isEnabled());
+        user.setAvatar(userOptional.get().getAvatar());
+        user.setAddress(userOptional.get().getAddress());
+        user.setBirthday(userOptional.get().getBirthday());
+        user.setEmail(userOptional.get().getEmail());
+        user.setFullname(userOptional.get().getFullname());
+        user.setHobby(userOptional.get().getHobby());
+        user.setPhone(userOptional.get().getPhone());
+        user.setRoles(userOptional.get().getRoles());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setConfirmPassword(passwordEncoder.encode(user.getConfirmPassword()));
+        userService.save(user);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
 
 
 
