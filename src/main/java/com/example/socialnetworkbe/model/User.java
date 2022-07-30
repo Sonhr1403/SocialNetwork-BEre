@@ -2,6 +2,7 @@ package com.example.socialnetworkbe.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -21,6 +22,21 @@ public class User implements Serializable {
 
     @Column(nullable = false)
     private String confirmPassword;
+
+    private String email;
+
+    private String phone;
+
+    private LocalDate birthday;
+
+    private String fullname;
+
+    private String avatar;
+
+    private String address;
+
+    private String hobby;
+
     private boolean enabled = true;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -33,6 +49,33 @@ public class User implements Serializable {
         this.username = username;
         this.password = password;
         this.confirmPassword = confirmPassword;
+        this.roles = roles;
+    }
+
+    public User(Long id, String username, String password, String confirmPassword, String email, String phone, LocalDate birthday, Set<Role> roles) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.confirmPassword = confirmPassword;
+        this.email = email;
+        this.phone = phone;
+        this.birthday = birthday;
+        this.roles = roles;
+    }
+
+    public User(Long id, String username, String password, String confirmPassword, String email, String phone, LocalDate birthday, String fullname, String avatar, String address, String hobby, boolean enabled, Set<Role> roles) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.confirmPassword = confirmPassword;
+        this.email = email;
+        this.phone = phone;
+        this.birthday = birthday;
+        this.fullname = fullname;
+        this.avatar = avatar;
+        this.address = address;
+        this.hobby = hobby;
+        this.enabled = enabled;
         this.roles = roles;
     }
 
@@ -91,4 +134,59 @@ public class User implements Serializable {
         this.enabled = enabled;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public LocalDate getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getHobby() {
+        return hobby;
+    }
+
+    public void setHobby(String hobby) {
+        this.hobby = hobby;
+    }
 }
