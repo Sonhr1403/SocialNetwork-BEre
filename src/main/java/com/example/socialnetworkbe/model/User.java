@@ -1,6 +1,7 @@
 package com.example.socialnetworkbe.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Set;
@@ -15,21 +16,33 @@ public class User implements Serializable {
     private Long id;
 
     @Column(unique = true, nullable = false)
+    @NotBlank(message = "user name không được để trống")
     private String username;
 
     @Column(nullable = false)
+    @NotBlank(message = "password không được để trống")
     private String password;
 
     @Column(nullable = false)
+    @NotBlank(message = "confirm password không được để trống")
     private String confirmPassword;
 
+    @Column(unique = true, nullable = false)
+    @Email
+    @NotBlank(message = "email không để trống")
     private String email;
 
+    @Column(nullable = false)
+    @NotBlank(message = "số điện thoại không được để trống")
     private String phone;
 
+
+    @Past(message = "Ngày sinh phải trước thời gian hiện tại")
+    @NotNull(message = "không được để trống")
     private LocalDate birthday;
 
     private String fullname;
+
 
     private String avatar;
 

@@ -20,6 +20,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
@@ -28,6 +31,7 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import java.util.*;
 
+@Validated
 @RestController
 @PropertySource("classpath:application.properties")
 @CrossOrigin("*")
@@ -73,6 +77,9 @@ public class UserController {
         for (User currentUser : users) {
             if (currentUser.getUsername().equals(user.getUsername())) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            if(currentUser.getEmail().equals(user.getEmail())){
+                return  new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
         }
         if (!userService.isCorrectConfirmPassword(user)) {
@@ -152,4 +159,5 @@ public class UserController {
         return new ResponseEntity<Object>(
                 apiError, new HttpHeaders(), apiError.getStatus());
     }
+
 }
