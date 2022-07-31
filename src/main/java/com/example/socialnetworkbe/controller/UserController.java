@@ -69,17 +69,17 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> createUser(@Valid @RequestBody User user, BindingResult bindingResult) {
+    public ResponseEntity<?> createUser(@Valid @RequestBody User user, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Iterable<User> users = userService.findAll();
         for (User currentUser : users) {
             if (currentUser.getUsername().equals(user.getUsername())) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("Tên người dùng đã tồn tại",HttpStatus.BAD_REQUEST);
             }
             if(currentUser.getEmail().equals(user.getEmail())){
-                return  new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("Email đã tồn tại",HttpStatus.BAD_REQUEST);
             }
         }
         if (!userService.isCorrectConfirmPassword(user)) {
