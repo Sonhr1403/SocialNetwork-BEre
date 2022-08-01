@@ -143,7 +143,7 @@ public class UserController {
     }
 
     @PutMapping("/users/change-password/{id}")
-    public ResponseEntity<User> updateUserPassword(@PathVariable Long id, @RequestBody User user,@RequestParam String oldPassword) {
+    public ResponseEntity<User> updateUserPassword(@PathVariable Long id, @RequestBody User user,@RequestParam("currentPassword") String oldPassword) {
         Optional<User> userOptional = this.userService.findById(id);
         User userTest = new User(userOptional.get().getUsername(),oldPassword);
         if (!userOptional.isPresent()) {
