@@ -111,7 +111,7 @@ public class UserController {
         String jwt = jwtService.generateTokenLogin(authentication);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User currentUser = userService.findByUsername(user.getUsername());
-        return ResponseEntity.ok(new JwtResponse(jwt, currentUser.getId(), userDetails.getUsername(), userDetails.getAuthorities()));
+        return ResponseEntity.ok(new JwtResponse(jwt, currentUser.getId(), userDetails.getUsername(), currentUser.getFullname(), currentUser.getAvatar(), userDetails.getAuthorities()));
     }
 
     @GetMapping("/hello")
@@ -137,10 +137,41 @@ public class UserController {
         user.setPassword(userOptional.get().getPassword());
         user.setRoles(userOptional.get().getRoles());
         user.setConfirmPassword(userOptional.get().getConfirmPassword());
-
+        user.setAvatar(userOptional.get().getAvatar());
         userService.save(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
+
+    @PutMapping("/users/change-password/{id}")
+    public ResponseEntity<User> updateUserPassword(@PathVariable Long id, @RequestBody User user,@RequestParam String oldPassword) {
+        Optional<User> userOptional = this.userService.findById(id);
+        User userTest = new User(userOptional.get().getUsername(),oldPassword);
+        if (!userOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        if (login(userTest).getStatusCode().equals(HttpStatus.OK)){
+            user.setId(userOptional.get().getId());
+            user.setUsername(userOptional.get().getUsername());
+            user.setEnabled(userOptional.get().isEnabled());
+            user.setAvatar(userOptional.get().getAvatar());
+            user.setAddress(userOptional.get().getAddress());
+            user.setBirthday(userOptional.get().getBirthday());
+            user.setEmail(userOptional.get().getEmail());
+            user.setFullname(userOptional.get().getFullname());
+            user.setHobby(userOptional.get().getHobby());
+            user.setPhone(userOptional.get().getPhone());
+            user.setRoles(userOptional.get().getRoles());
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setConfirmPassword(passwordEncoder.encode(user.getConfirmPassword()));
+            userService.save(user);
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+
 
     @ExceptionHandler({ ConstraintViolationException.class })
     public ResponseEntity<Object> handleConstraintViolation(
