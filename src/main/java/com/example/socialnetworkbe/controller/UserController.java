@@ -79,8 +79,8 @@ public class UserController {
             if (currentUser.getUsername().equals(user.getUsername())) {
                 return new ResponseEntity<>("Tên người dùng đã tồn tại", HttpStatus.BAD_REQUEST);
             }
-            if (currentUser.getEmail().equals(user.getEmail())) {
-                return new ResponseEntity<>("Email đã tồn tại", HttpStatus.BAD_REQUEST);
+            if(currentUser.getEmail().equals(user.getEmail())){
+                return new ResponseEntity<>("Email đã tồn tại",HttpStatus.BAD_REQUEST);
             }
         }
         if (!userService.isCorrectConfirmPassword(user)) {
@@ -113,7 +113,7 @@ public class UserController {
         String jwt = jwtService.generateTokenLogin(authentication);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User currentUser = userService.findByUsername(user.getUsername());
-        return ResponseEntity.ok(new JwtResponse(jwt, currentUser.getId(), userDetails.getUsername(), userDetails.getAuthorities()));
+        return ResponseEntity.ok(new JwtResponse(jwt, currentUser.getId(), userDetails.getUsername(), currentUser.getFullname(), currentUser.getAvatar(), userDetails.getAuthorities()));
     }
 
     @GetMapping("/hello")
@@ -139,12 +139,13 @@ public class UserController {
         user.setPassword(userOptional.get().getPassword());
         user.setRoles(userOptional.get().getRoles());
         user.setConfirmPassword(userOptional.get().getConfirmPassword());
+        user.setAvatar(userOptional.get().getAvatar());
         userService.save(user);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PutMapping("/users/change-password/{id}")
-    public ResponseEntity<User> updateUserPassword(@PathVariable Long id, @RequestBody User user, @RequestParam String oldPassword) {
+    public ResponseEntity<User> updateUserPassword(@PathVariable Long id, @RequestBody User user,@RequestParam("currentPassword") String oldPassword) {
         Optional<User> userOptional = this.userService.findById(id);
         User userTest = new User(userOptional.get().getUsername(), oldPassword);
         if (!userOptional.isPresent()) {
