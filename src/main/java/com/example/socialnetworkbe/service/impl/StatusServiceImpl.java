@@ -40,4 +40,9 @@ public class StatusServiceImpl implements StatusService<Status> {
     public Status findLastStatus() {
         return repository.findLastStatus();
     }
+
+    @Override
+    public Iterable<Status> findAllByOwner(Long id) {
+        return repository.findAllByOwner(id);
+    }
 }

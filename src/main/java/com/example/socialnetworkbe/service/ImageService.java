@@ -1,5 +1,8 @@
 package com.example.socialnetworkbe.service;
 
+import com.example.socialnetworkbe.model.Image;
+import org.springframework.data.repository.query.Param;
+
 import java.util.Optional;
 
 public interface ImageService<T> {
@@ -10,4 +13,6 @@ public interface ImageService<T> {
     void save(T t);
 
     void remove(Long id);
+
+    Iterable<Image> findAllByStatus(Long id);
 }
