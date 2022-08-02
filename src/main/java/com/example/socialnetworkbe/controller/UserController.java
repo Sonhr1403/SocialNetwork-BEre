@@ -62,6 +62,7 @@ public class UserController {
         Iterable<User> users = userService.findAll();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
+
     @GetMapping("/admin/users")
     public ResponseEntity<Iterable<User>> showAllUserByAdmin() {
         Iterable<User> users = userService.findAll();
@@ -76,10 +77,10 @@ public class UserController {
         Iterable<User> users = userService.findAll();
         for (User currentUser : users) {
             if (currentUser.getUsername().equals(user.getUsername())) {
-                return new ResponseEntity<>("Tên người dùng đã tồn tại",HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("Tên người dùng đã tồn tại", HttpStatus.BAD_REQUEST);
             }
-            if(currentUser.getEmail().equals(user.getEmail())){
-                return new ResponseEntity<>("Email đã tồn tại",HttpStatus.BAD_REQUEST);
+            if (currentUser.getEmail().equals(user.getEmail())) {
+                return new ResponseEntity<>("Email đã tồn tại", HttpStatus.BAD_REQUEST);
             }
         }
         if (!userService.isCorrectConfirmPassword(user)) {
@@ -101,6 +102,7 @@ public class UserController {
         userService.save(user);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User user) {
         Authentication authentication = authenticationManager.authenticate(
@@ -115,7 +117,7 @@ public class UserController {
     }
 
     @GetMapping("/hello")
-    public ResponseEntity<String> hello(){
+    public ResponseEntity<String> hello() {
         return new ResponseEntity("Hello World", HttpStatus.OK);
     }
 
@@ -142,13 +144,13 @@ public class UserController {
     }
 
     @PutMapping("/users/change-password/{id}")
-    public ResponseEntity<User> updateUserPassword(@PathVariable Long id, @RequestBody User user,@RequestParam String oldPassword) {
+    public ResponseEntity<User> updateUserPassword(@PathVariable Long id, @RequestBody User user, @RequestParam String oldPassword) {
         Optional<User> userOptional = this.userService.findById(id);
-        User userTest = new User(userOptional.get().getUsername(),oldPassword);
+        User userTest = new User(userOptional.get().getUsername(), oldPassword);
         if (!userOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        if (login(userTest).getStatusCode().equals(HttpStatus.OK)){
+        if (login(userTest).getStatusCode().equals(HttpStatus.OK)) {
             user.setId(userOptional.get().getId());
             user.setUsername(userOptional.get().getUsername());
             user.setEnabled(userOptional.get().isEnabled());
@@ -163,16 +165,14 @@ public class UserController {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setConfirmPassword(passwordEncoder.encode(user.getConfirmPassword()));
             userService.save(user);
-        }
-        else {
+        } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
 
-
-    @ExceptionHandler({ ConstraintViolationException.class })
+    @ExceptionHandler({ConstraintViolationException.class})
     public ResponseEntity<Object> handleConstraintViolation(
             ConstraintViolationException ex, WebRequest request) {
 //        List<String> errors = new ArrayList<String>();

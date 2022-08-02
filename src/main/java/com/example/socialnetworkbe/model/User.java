@@ -14,7 +14,6 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(unique = true, nullable = false)
     @NotBlank(message = "user name không được để trống")
     private String username;
