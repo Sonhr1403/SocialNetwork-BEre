@@ -1,6 +1,8 @@
 package com.example.socialnetworkbe.controller;
 
+import com.example.socialnetworkbe.model.Image;
 import com.example.socialnetworkbe.model.Status;
+import com.example.socialnetworkbe.service.ImageService;
 import com.example.socialnetworkbe.service.StatusService;
 import com.example.socialnetworkbe.service.UserService;
 import org.aspectj.asm.IRelationship;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Optional;
 
 @RestController
@@ -21,6 +24,8 @@ public class StatusController {
     StatusService statusService;
     @Autowired
     UserService userService;
+    @Autowired
+    ImageService imageService;
 
     @GetMapping
     public ResponseEntity<Iterable<Status>> findAllStatus() {
@@ -64,5 +69,19 @@ public class StatusController {
         status.setStatus(0);
         statusService.save(status);
         return new ResponseEntity<>(status, HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/find-all-by-user/{id}")
+    public ResponseEntity<ArrayList<?>> findAllByUser(@PathVariable Long id) {
+        ArrayList<Iterable> result = new ArrayList<>();
+        Iterable<Status> listStatus = statusService.findAllByOwner(id);
+        result.add(listStatus);
+        ArrayList<Iterable<Image>> listImage = new ArrayList<>();
+        for (Status status : listStatus) {
+            Iterable<Image> images = imageService.findAllByStatus(status.getId());
+            listImage.add(images);
+        }
+        result.add(listImage);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
