@@ -20,7 +20,7 @@ public class RelationshipController {
     RelationshipServiceImpl relationshipService;
 
     @PostMapping()
-    public ResponseEntity<Relationship> makeFriend(@RequestBody Relationship relationship){
+    public ResponseEntity<Relationship> addFriend(@RequestBody Relationship relationship){
         relationship.setStatus(1);
         relationshipService.save(relationship);
         return new ResponseEntity<>(relationship,HttpStatus.OK);
@@ -42,7 +42,7 @@ public class RelationshipController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable Long id){
+    public ResponseEntity deleteRelationship(@PathVariable Long id){
         Optional<Relationship> relationshipOptional = relationshipService.findById(id);
         if(!relationshipOptional.isPresent()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
