@@ -28,4 +28,9 @@ public class RelationshipServiceImpl implements RelationshipService {
         relationshipRepository.deleteById(id);
     }
 
+    @Override
+    public Relationship findRelationship(Long id1, Long id2) {
+        return relationshipRepository.findRelationship(id1,id2);
+    }
+
 }

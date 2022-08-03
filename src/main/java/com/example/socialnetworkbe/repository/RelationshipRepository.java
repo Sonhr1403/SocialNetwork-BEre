@@ -9,4 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RelationshipRepository extends JpaRepository<Relationship, Long> {
+
+    @Query(value = "select * from relationship where ((user1_id = :id1 and user2_id = :id2) or (user1_id = :id2 and user2_id = :id1)) and status <> 0",nativeQuery = true)
+    Relationship findRelationship(@Param("id1") Long id1,@Param("id2") Long id2);
 }
