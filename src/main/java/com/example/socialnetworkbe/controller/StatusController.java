@@ -84,18 +84,4 @@ public class StatusController {
         result.add(listImage);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
-
-    @GetMapping("/find-all-by-user/{id}")
-    public ResponseEntity<ArrayList<?>> findAllByUser(@PathVariable Long id) {
-        ArrayList<Iterable> result = new ArrayList<>();
-        Iterable<Status> listStatus = statusService.findAllByOwner(id);
-        result.add(listStatus);
-        ArrayList<Iterable<Image>> listImage = new ArrayList<>();
-        for (Status status : listStatus) {
-            Iterable<Image> images = imageService.findAllByStatus(status.getId());
-            listImage.add(images);
-        }
-        result.add(listImage);
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
 }
