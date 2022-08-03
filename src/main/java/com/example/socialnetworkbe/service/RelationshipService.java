@@ -13,5 +13,6 @@ public interface RelationshipService {
 
     void delete(Long id);
 
+    Relationship findRelationship(Long id1,Long id2);
 }
 
