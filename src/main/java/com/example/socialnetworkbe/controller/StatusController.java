@@ -5,6 +5,7 @@ import com.example.socialnetworkbe.model.Status;
 import com.example.socialnetworkbe.service.ImageService;
 import com.example.socialnetworkbe.service.StatusService;
 import com.example.socialnetworkbe.service.UserService;
+import org.aspectj.asm.IRelationship;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,24 +47,42 @@ public class StatusController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Status> updateStatus(@PathVariable Long id, @RequestBody Status status) {
-        Optional<Status> statusOptional = statusService.findById(id);
-        if (!statusOptional.isPresent()) {
+        Optional<Status> oldStatusOptional = statusService.findById(id);
+        if (!oldStatusOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        status.setId(statusOptional.get().getId());
+//        giữ nguyên đối tượng ko thay đổi
+        status.setId(oldStatusOptional.get().getId());
+        status.setOwner(oldStatusOptional.get().getOwner());
+        status.setCreateAt(oldStatusOptional.get().getCreateAt());
         statusService.save(status);
         return new ResponseEntity<>(status, HttpStatus.OK);
     }
 
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Status> deleteStatus(@PathVariable Long id) {
         Optional<Status> statusOptional = statusService.findById(id);
+        Status status = statusOptional.get();
         if (!statusOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        statusService.remove(id);
-        return new ResponseEntity<>(statusOptional.get(), HttpStatus.NO_CONTENT);
+        status.setStatus(0);
+        statusService.save(status);
+        return new ResponseEntity<>(status, HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/find-all-by-user/{id}")
+    public ResponseEntity<ArrayList<?>> findAllByUser(@PathVariable Long id) {
+        ArrayList<Iterable> result = new ArrayList<>();
+        Iterable<Status> listStatus = statusService.findAllByOwner(id);
+        result.add(listStatus);
+        ArrayList<Iterable<Image>> listImage = new ArrayList<>();
+        for (Status status : listStatus) {
+            Iterable<Image> images = imageService.findAllByStatus(status.getId());
+            listImage.add(images);
+        }
+        result.add(listImage);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @GetMapping("/find-all-by-user/{id}")
