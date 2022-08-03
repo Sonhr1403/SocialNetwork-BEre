@@ -27,7 +27,7 @@ public class RelationshipController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Relationship> updateUserProfile(@PathVariable Long id) {
+    public ResponseEntity<Relationship> confirmRelationship(@PathVariable Long id) {
         Relationship relationship = new Relationship();
         Optional<Relationship> relationshipOptional = this.relationshipService.findById(id);
         if (!relationshipOptional.isPresent()) {
