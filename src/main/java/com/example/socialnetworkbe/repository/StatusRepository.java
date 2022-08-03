@@ -13,4 +13,8 @@ public interface StatusRepository extends JpaRepository<Status, Long> {
 
     @Query(value = "select * from status where owner_id = :id and status <> 0", nativeQuery = true)
     Iterable<Status> findAllByOwner(@Param("id") Long id);
+
+
+    @Query(value = "select * from status where status <> 0", nativeQuery = true)
+    Iterable<Status> findAll1();
 }

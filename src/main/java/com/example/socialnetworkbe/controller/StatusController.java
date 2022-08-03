@@ -27,8 +27,17 @@ public class StatusController {
     ImageService imageService;
 
     @GetMapping
-    public ResponseEntity<Iterable<Status>> findAllStatus() {
-        return new ResponseEntity<>(statusService.findAll(), HttpStatus.OK);
+    public ResponseEntity<ArrayList<?>> findAll() {
+        ArrayList<Iterable> result = new ArrayList<>();
+        Iterable<Status> listStatus = statusService.findAll();
+        result.add(listStatus);
+        ArrayList<Iterable<Image>> listImage = new ArrayList<>();
+        for (Status status : listStatus) {
+            Iterable<Image> images = imageService.findAllByStatus(status.getId());
+            listImage.add(images);
+        }
+        result.add(listImage);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PostMapping

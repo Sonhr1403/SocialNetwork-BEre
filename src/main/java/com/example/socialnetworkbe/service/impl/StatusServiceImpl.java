@@ -18,7 +18,7 @@ public class StatusServiceImpl implements StatusService<Status> {
 
     @Override
     public Iterable<Status> findAll() {
-        return repository.findAll();
+        return repository.findAll1();
     }
 
     @Override
