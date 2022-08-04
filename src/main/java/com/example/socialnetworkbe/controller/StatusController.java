@@ -29,10 +29,13 @@ public class StatusController {
     @GetMapping
     public ResponseEntity<ArrayList<?>> findAll(@RequestParam("currentId") Long currentId) {
         ArrayList<Iterable> result = new ArrayList<>();
-        Iterable<Status> listStatus = statusService.findAll2(currentId);
-//        if (listStatus.iterator().hasNext()) {
-//            listStatus = statusService.findAll();
-//        }
+        ArrayList<Status> statusOwner = (ArrayList<Status>) statusService.findAllByOwner(currentId);
+        ArrayList<Status> statusFriend = (ArrayList<Status>) statusService.findAllByOwnerFriend(currentId);
+        ArrayList<Status> statusStranger = (ArrayList<Status>) statusService.findAllByStranger(currentId);
+        ArrayList<Status> listStatus = new ArrayList<>();
+        listStatus.addAll(statusOwner);
+        listStatus.addAll(statusFriend);
+        listStatus.addAll(statusStranger);
         result.add(listStatus);
         ArrayList<Iterable<Image>> listImage = new ArrayList<>();
         for (Status status : listStatus) {

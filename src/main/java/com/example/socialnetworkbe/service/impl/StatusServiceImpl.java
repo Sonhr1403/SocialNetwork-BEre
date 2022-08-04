@@ -18,7 +18,7 @@ public class StatusServiceImpl implements StatusService<Status> {
 
     @Override
     public Iterable<Status> findAll() {
-        return repository.findAll1();
+        return null;
     }
 
     @Override
@@ -42,12 +42,17 @@ public class StatusServiceImpl implements StatusService<Status> {
     }
 
     @Override
-    public Iterable<Status> findAll2(Long id) {
-        return repository.findAll2(id);
+    public Iterable<Status> findAllByOwnerFriend(Long id) {
+        return repository.findAllByOwnerFriend(id);
     }
 
     @Override
     public Iterable<Status> findAllByOwner(Long id) {
         return repository.findAllByOwner(id);
+    }
+
+    @Override
+    public Iterable<Status> findAllByStranger(Long id) {
+        return repository.findAllByStranger(id);
     }
 }

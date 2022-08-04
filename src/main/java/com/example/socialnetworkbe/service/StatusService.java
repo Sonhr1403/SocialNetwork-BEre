@@ -18,7 +18,9 @@ public interface StatusService<T> {
 
     T findLastStatus();
 
-    Iterable<Status> findAll2( Long id);
+    Iterable<Status> findAllByOwnerFriend( Long id);
 
     Iterable<T> findAllByOwner(Long id);
+
+    Iterable<T> findAllByStranger(Long id);
 }
