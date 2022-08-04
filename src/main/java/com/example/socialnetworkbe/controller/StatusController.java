@@ -27,7 +27,7 @@ public class StatusController {
     ImageService imageService;
 
     @GetMapping
-    public ResponseEntity<ArrayList<?>> findAll() {
+    public ResponseEntity<ArrayList<?>> findAll(@RequestParam Long currentId) {
         ArrayList<Iterable> result = new ArrayList<>();
         Iterable<Status> listStatus = statusService.findAll();
         result.add(listStatus);
