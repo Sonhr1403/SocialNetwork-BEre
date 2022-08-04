@@ -28,8 +28,23 @@ public class StatusController {
     ImageService imageService;
 
     @GetMapping
-    public ResponseEntity<Iterable<Status>> findAllStatus() {
-        return new ResponseEntity<>(statusService.findAll(), HttpStatus.OK);
+    public ResponseEntity<ArrayList<?>> findAll(@RequestParam("currentId") Long currentId) {
+        ArrayList<Iterable> result = new ArrayList<>();
+        ArrayList<Status> statusOwner = (ArrayList<Status>) statusService.findAllByOwner(currentId);
+        ArrayList<Status> statusFriend = (ArrayList<Status>) statusService.findAllByOwnerFriend(currentId);
+        ArrayList<Status> statusStranger = (ArrayList<Status>) statusService.findAllByStranger(currentId);
+        ArrayList<Status> listStatus = new ArrayList<>();
+        listStatus.addAll(statusOwner);
+        listStatus.addAll(statusFriend);
+        listStatus.addAll(statusStranger);
+        result.add(listStatus);
+        ArrayList<Iterable<Image>> listImage = new ArrayList<>();
+        for (Status status : listStatus) {
+            Iterable<Image> images = imageService.findAllByStatus(status.getId());
+            listImage.add(images);
+        }
+        result.add(listImage);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PostMapping

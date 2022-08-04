@@ -1,6 +1,7 @@
 package com.example.socialnetworkbe.service.impl;
 
 import com.example.socialnetworkbe.model.Relationship;
+import com.example.socialnetworkbe.model.User;
 import com.example.socialnetworkbe.repository.RelationshipRepository;
 import com.example.socialnetworkbe.service.RelationshipService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,5 +33,16 @@ public class RelationshipServiceImpl implements RelationshipService {
     public Relationship findRelationship(Long id1, Long id2) {
         return relationshipRepository.findRelationship(id1,id2);
     }
+
+    @Override
+    public Iterable<Relationship> findAllFriendByUserId(Long id) {
+        return relationshipRepository.findAllFriendByUserId(id);
+    }
+
+    @Override
+    public Iterable<Relationship> findMutualFriend(Long currentId, Long id) {
+        return relationshipRepository.findMutualFriend(currentId,id);
+    }
+
 
 }
