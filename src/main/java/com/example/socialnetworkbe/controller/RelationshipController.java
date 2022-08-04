@@ -63,5 +63,11 @@ public class RelationshipController {
         Iterable<Relationship> relationships = relationshipService.findAllFriendByUserId(id);
         return new ResponseEntity<>(relationships, HttpStatus.OK);
     }
+
+    @GetMapping("/find-mutual-friends")
+    public ResponseEntity<Iterable<Relationship>> findMutualFriend(@RequestParam Long currentId,@RequestParam Long id) {
+        Iterable<Relationship> relationships = relationshipService.findMutualFriend(currentId,id);
+        return new ResponseEntity<>(relationships, HttpStatus.OK);
+    }
 }
 
