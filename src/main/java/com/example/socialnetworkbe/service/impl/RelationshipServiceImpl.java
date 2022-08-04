@@ -39,4 +39,10 @@ public class RelationshipServiceImpl implements RelationshipService {
         return relationshipRepository.findAllFriendByUserId(id);
     }
 
+    @Override
+    public Iterable<Relationship> findMutualFriend(Long currentId, Long id) {
+        return relationshipRepository.findMutualFriend(currentId,id);
+    }
+
+
 }
