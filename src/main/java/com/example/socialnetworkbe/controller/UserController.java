@@ -77,8 +77,8 @@ public class UserController {
             if (currentUser.getUsername().equals(user.getUsername())) {
                 return new ResponseEntity<>("Tên người dùng đã tồn tại", HttpStatus.BAD_REQUEST);
             }
-            if(currentUser.getEmail().equals(user.getEmail())){
-                return new ResponseEntity<>("Email đã tồn tại",HttpStatus.BAD_REQUEST);
+            if (currentUser.getEmail().equals(user.getEmail())) {
+                return new ResponseEntity<>("Email đã tồn tại", HttpStatus.BAD_REQUEST);
             }
         }
         if (!userService.isCorrectConfirmPassword(user)) {
@@ -143,7 +143,7 @@ public class UserController {
     }
 
     @PutMapping("/users/change-password/{id}")
-    public ResponseEntity<User> updateUserPassword(@PathVariable Long id, @RequestBody User user,@RequestParam("currentPassword") String oldPassword) {
+    public ResponseEntity<User> updateUserPassword(@PathVariable Long id, @RequestBody User user, @RequestParam("currentPassword") String oldPassword) {
         Optional<User> userOptional = this.userService.findById(id);
         User userTest = new User(userOptional.get().getUsername(), oldPassword);
         if (!userOptional.isPresent()) {
@@ -166,6 +166,33 @@ public class UserController {
             userService.save(user);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @PutMapping("/users/change-avatar/{id}")
+    public ResponseEntity<User> updateUserAvatar(@PathVariable Long id, @RequestBody User user) {
+        Optional<User> userOptional = this.userService.findById(id);
+        if (!userOptional.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        user.setId(userOptional.get().getId());
+        user.setUsername(userOptional.get().getUsername());
+        user.setEnabled(userOptional.get().isEnabled());
+        user.setAddress(userOptional.get().getAddress());
+        user.setBirthday(userOptional.get().getBirthday());
+        user.setEmail(userOptional.get().getEmail());
+        user.setFullname(userOptional.get().getFullname());
+        user.setHobby(userOptional.get().getHobby());
+        user.setPhone(userOptional.get().getPhone());
+        user.setRoles(userOptional.get().getRoles());
+        user.setPassword(userOptional.get().getPassword());
+        user.setConfirmPassword(userOptional.get().getConfirmPassword());
+        if (user.getAvatar().equals("")) {
+            user.setAvatar(userOptional.get().getAvatar());
+            userService.save(user);
+        } else {
+            userService.save(user);
         }
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
