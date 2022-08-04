@@ -42,6 +42,11 @@ public class StatusServiceImpl implements StatusService<Status> {
     }
 
     @Override
+    public Iterable<Status> findAll2(Long id) {
+        return repository.findAll2(id);
+    }
+
+    @Override
     public Iterable<Status> findAllByOwner(Long id) {
         return repository.findAllByOwner(id);
     }

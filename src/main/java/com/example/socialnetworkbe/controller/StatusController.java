@@ -27,9 +27,12 @@ public class StatusController {
     ImageService imageService;
 
     @GetMapping
-    public ResponseEntity<ArrayList<?>> findAll(@RequestParam Long currentId) {
+    public ResponseEntity<ArrayList<?>> findAll(@RequestParam("currentId") Long currentId) {
         ArrayList<Iterable> result = new ArrayList<>();
-        Iterable<Status> listStatus = statusService.findAll();
+        Iterable<Status> listStatus = statusService.findAll2(currentId);
+//        if (listStatus.iterator().hasNext()) {
+//            listStatus = statusService.findAll();
+//        }
         result.add(listStatus);
         ArrayList<Iterable<Image>> listImage = new ArrayList<>();
         for (Status status : listStatus) {
