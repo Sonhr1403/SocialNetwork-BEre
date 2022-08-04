@@ -52,7 +52,6 @@ public class ImageController {
         return new ResponseEntity(image, HttpStatus.OK);
     }
 
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Status> deleteStatus(@PathVariable Long id) {
         Optional<Status> imageOptional = imageService.findById(id);
