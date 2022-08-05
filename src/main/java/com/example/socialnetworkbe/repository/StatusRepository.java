@@ -24,7 +24,7 @@ public interface StatusRepository extends JpaRepository<Status, Long> {
             "        from user_table\n" +
             "                 join relationship on (user_table.id = relationship.user2_id) or (user_table.id = relationship.user1_id)\n" +
             "        where user_table.id = :id\n" +
-            "          and relationship.status = 2)\n" +
+            "          and relationship.status = 2) and status = 1\n" +
             " order by create_at desc", nativeQuery = true)
     Iterable<Status> findAllByOwnerFriend(@Param("id") Long id);
 
@@ -38,7 +38,7 @@ public interface StatusRepository extends JpaRepository<Status, Long> {
             "        from user_table\n" +
             "                 join relationship on (user_table.id = relationship.user2_id) or (user_table.id = relationship.user1_id)\n" +
             "        where user_table.id = :id\n" +
-            "          and relationship.status = 2)\n" +
+            "          and relationship.status = 2) and status = 1\n" +
             "   and owner_id <> :id\n" +
             " order by create_at desc", nativeQuery = true)
     Iterable<Status> findAllByStranger(@Param("id") Long id);
