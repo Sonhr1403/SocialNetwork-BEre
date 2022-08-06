@@ -11,4 +11,5 @@ public interface CommentService <T>{
 
     void remove(Long id);
 
+    Iterable<T> findAllByStatus(Long statusId);
 }

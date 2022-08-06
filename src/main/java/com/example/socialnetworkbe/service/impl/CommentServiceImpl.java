@@ -34,4 +34,9 @@ public class CommentServiceImpl implements CommentService<Comment> {
     public void remove(Long id) {
         commentRepository.deleteById(id);
     }
+
+    @Override
+    public Iterable<Comment> findAllByStatus(Long statusId) {
+        return commentRepository.findAllByStatus(statusId);
+    }
 }

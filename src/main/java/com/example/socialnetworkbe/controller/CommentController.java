@@ -50,4 +50,10 @@ public class CommentController {
         commentService.save(comment);
         return new ResponseEntity(comment, HttpStatus.OK);
     }
+
+    @GetMapping("/find-all-by-status")
+    public ResponseEntity<Iterable<Comment>> findAllByStatus(@RequestParam Long statusId) {
+        Iterable<Comment> listComment = commentService.findAllByStatus(statusId);
+        return new ResponseEntity<>(listComment, HttpStatus.OK);
+    }
 }
