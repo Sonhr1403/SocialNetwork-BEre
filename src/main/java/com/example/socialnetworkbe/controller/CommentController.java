@@ -32,7 +32,7 @@ public class CommentController {
     @PostMapping
     public ResponseEntity<Comment> save(@RequestBody Comment comment) {
         comment.setCreateAt(LocalDateTime.now());
-        commentService.save(comment);
+            commentService.save(comment);
         return new ResponseEntity(commentService, HttpStatus.OK);
     }
 
