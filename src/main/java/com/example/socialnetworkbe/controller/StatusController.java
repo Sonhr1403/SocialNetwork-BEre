@@ -56,8 +56,18 @@ public class StatusController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Status> findById(@PathVariable Long id) {
-        return new ResponseEntity(statusService.findById(id), HttpStatus.OK);
+    public ResponseEntity<ArrayList<?>> findById(@PathVariable Long id) {
+        Optional<Status> status = statusService.findById(id);
+        if (!status.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        ArrayList<Iterable> result = new ArrayList<>();
+        ArrayList<Optional<Status>> statuses = new ArrayList<>();
+        statuses.add(status);
+        result.add(statuses);
+        Iterable<Image> images = imageService.findAllByStatus(status.get().getId());
+        result.add(images);
+        return new ResponseEntity(result, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
