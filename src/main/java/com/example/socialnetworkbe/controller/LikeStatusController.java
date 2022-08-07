@@ -34,7 +34,7 @@ public class LikeStatusController {
     }
 
     @PostMapping("")
-    public ResponseEntity<LikeStatus> likeStatus(@RequestParam Long idStatus, @RequestParam Long idUser) {
+    public ResponseEntity<LikeStatus> likeStatus(@RequestParam Long idStatus,@RequestParam Long idUser) {
         LikeStatus likeStatus = new LikeStatus();
         Status status = statusService.findById(idStatus).get();
         User userOptional = userService.findById(idUser).get();
@@ -48,7 +48,7 @@ public class LikeStatusController {
                 likeStatusService.delete(likeStatuses.getId());
             }
         }
-        return new ResponseEntity<>(likeStatuses, HttpStatus.OK);
+        return new ResponseEntity<>(likeStatus, HttpStatus.OK);
     }
 
 }
