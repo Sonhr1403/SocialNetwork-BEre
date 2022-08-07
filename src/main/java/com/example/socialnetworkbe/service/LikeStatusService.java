@@ -14,6 +14,6 @@ public interface LikeStatusService {
 
     Iterable<LikeStatus> findAll();
 
-    LikeStatus findByUserLikeIdAndAndStatusId(Long userID,Long statusId);
+    LikeStatus findByUserLikeIdAndAndStatusId(Long idUser,Long idStatus);
 
 }
