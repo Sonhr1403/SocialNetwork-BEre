@@ -1,4 +1,7 @@
 package com.example.socialnetworkbe.service;
 
-public interface LikeStatusService {
+import org.springframework.data.repository.query.Param;
+
+public interface LikeStatusService<T> {
+    Integer findNumberOfLikeByStatus(Long statusId);
 }
