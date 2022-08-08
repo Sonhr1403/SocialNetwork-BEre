@@ -85,7 +85,7 @@ public class StatusController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Status> deleteStatus(@PathVariable Long id) {
+    public ResponseEntity<Status> deleteComment(@PathVariable Long id) {
         Optional<Status> statusOptional = statusService.findById(id);
         Status status = statusOptional.get();
         if (!statusOptional.isPresent()) {

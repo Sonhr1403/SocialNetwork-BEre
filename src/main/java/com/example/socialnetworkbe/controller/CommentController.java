@@ -32,23 +32,29 @@ public class CommentController {
     @PostMapping
     public ResponseEntity<Comment> save(@RequestBody Comment comment) {
         comment.setCreateAt(LocalDateTime.now());
-            commentService.save(comment);
+        commentService.save(comment);
         return new ResponseEntity(commentService, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Status> findById(@PathVariable Long id) {
+    public ResponseEntity<Comment> findById(@PathVariable Long id) {
         return new ResponseEntity(commentService.findById(id), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Status> updateComment(@PathVariable Long id, @RequestBody Comment comment) {
-        Optional<Comment> oldCommentOptional = commentService.findById(id);
-        if (!oldCommentOptional.isPresent()) {
+    public ResponseEntity<Comment> updateComment(@PathVariable Long id, @RequestBody Comment comment) {
+        Optional<Comment> oldCommentsOptional = commentService.findById(id);
+        if (!oldCommentsOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        comment.setId(oldCommentsOptional.get().getId());
+        comment.setCreateAt(oldCommentsOptional.get().getCreateAt());
+        comment.setActive(oldCommentsOptional.get().getActive());
+        comment.setUserComment(oldCommentsOptional.get().getUserComment());
+        comment.setStatus(oldCommentsOptional.get().getStatus());
+        comment.setComment(oldCommentsOptional.get().getComment());
         commentService.save(comment);
-        return new ResponseEntity(comment, HttpStatus.OK);
+        return new ResponseEntity<>(comment, HttpStatus.OK);
     }
 
     @GetMapping("/find-all-by-status")
