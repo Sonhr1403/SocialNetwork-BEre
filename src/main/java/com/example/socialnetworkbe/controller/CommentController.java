@@ -62,4 +62,10 @@ public class CommentController {
         Iterable<Comment> listComment = commentService.findAllByStatus(statusId);
         return new ResponseEntity<>(listComment, HttpStatus.OK);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Comment> delete(@PathVariable Long id) {
+        commentService.remove(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
