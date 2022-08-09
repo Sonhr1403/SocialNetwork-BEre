@@ -81,6 +81,7 @@ public class StatusController {
         status.setOwner(oldStatusOptional.get().getOwner());
         status.setCreateAt(oldStatusOptional.get().getCreateAt());
         statusService.save(status);
+        imageService.deleteAllByStatus(status.getId());
         return new ResponseEntity<>(status, HttpStatus.OK);
     }
 

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
@@ -41,4 +42,9 @@ public class ImageServiceImpl implements ImageService<Image> {
         return imageRepository.findAllByStatus(id);
     }
 
+    @Transactional
+    @Override
+    public void deleteAllByStatus(Long statusId) {
+        imageRepository.deleteAllByStatusId(statusId);
+    }
 }
