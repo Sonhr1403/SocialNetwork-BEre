@@ -25,30 +25,30 @@ public class LikeCommentController {
     @Autowired
     UserServiceImpl userService;
 
-    private boolean checkLikeComment(User user, Comment comment, Iterable<LikeComment> likeComments) {
-        for (LikeComment i: likeComments) {
-            if (i.getComment() == comment && i.getUserLike() == user && i.getId()==null) {
-                return false;
-            }
+    @PostMapping("")
+    public ResponseEntity<LikeComment> likeStatus(@RequestParam Long idComment, @RequestParam Long idUser) {
+        LikeComment likeComment = new LikeComment();
+        Comment comment = commentService.findById(idComment).get();
+        User userOptional = userService.findById(idUser).get();
+        LikeComment likeComments = likeCommentService.findByUserLikeIdAndAndCommentId(userOptional.getId(), comment.getId());
+        if (likeComments == null) {
+            likeComment.setUserLike(userOptional);
+            likeComment.setComment(comment);
+            likeCommentService.save(likeComment);
+        } else {
+            likeCommentService.delete(likeComments.getId());
         }
-        return true;
+        return new ResponseEntity<>(likeComment, HttpStatus.OK);
     }
 
-//    @PostMapping("")
-//    public ResponseEntity<LikeComment> likeStatus(@RequestParam Long idComment, @RequestParam Long idUser) {
-//        LikeComment likeComment = new LikeComment();
-//        Comment comment = commentService.findById(idComment).get();
-//        User userOptional = userService.findById(idUser).get();
-//        LikeComment likeComments = likeCommentService.findByUserLikeIdAndAndCommentId(userOptional.getId(), comment.getId());
-//        if (checkLikeComment(userOptional, comment, likeCommentService.findAll())) {
-//            if (likeComments == null) {
-//                likeComment.setUserLike(userOptional);
-//                likeComment.setComment(comment);
-//                likeCommentService.save(likeComment);
-//            } else {
-//                likeCommentService.delete(likeComments.getId());
-//            }
-//        }
-//        return new ResponseEntity<>(likeComment, HttpStatus.OK);
-//    }
+    @GetMapping("/check")
+    public ResponseEntity check(@RequestParam Long idComment, @RequestParam Long idUser) {
+        Comment comment = commentService.findById(idComment).get();
+        User userOptional = userService.findById(idUser).get();
+        LikeComment likeComments = likeCommentService.findByUserLikeIdAndAndCommentId(userOptional.getId(), comment.getId());
+        if (likeComments == null) {
+            return new ResponseEntity(false, HttpStatus.OK);
+        } else
+            return new ResponseEntity<>(true, HttpStatus.OK);
+    }
 }
