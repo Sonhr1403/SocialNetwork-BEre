@@ -53,7 +53,6 @@ public class LikeStatusController {
 
     @GetMapping("/check")
     public ResponseEntity check(@RequestParam Long idStatus, @RequestParam Long idUser) {
-        LikeStatus likeStatus = new LikeStatus();
         Status status = statusService.findById(idStatus).get();
         User userOptional = userService.findById(idUser).get();
         LikeStatus likeStatuses = likeStatusService.findByUserLikeIdAndAndStatusId(userOptional.getId(), status.getId());
