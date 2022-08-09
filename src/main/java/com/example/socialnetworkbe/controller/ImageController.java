@@ -1,6 +1,7 @@
 package com.example.socialnetworkbe.controller;
 
 import com.example.socialnetworkbe.model.Image;
+import com.example.socialnetworkbe.model.Relationship;
 import com.example.socialnetworkbe.model.Status;
 import com.example.socialnetworkbe.service.ImageService;
 import com.example.socialnetworkbe.service.StatusService;
@@ -25,24 +26,24 @@ public class ImageController {
 
 
     @GetMapping
-    public ResponseEntity<Iterable<Status>> findAllImage() {
+    public ResponseEntity<Iterable<Image>> findAllImage() {
         return new ResponseEntity<>(imageService.findAll(), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Status> saveImage(@Valid @RequestBody Image image) {
+    public ResponseEntity<Image> saveImage(@Valid @RequestBody Image image) {
         imageService.save(image);
         return new ResponseEntity(imageService, HttpStatus.CREATED);
     }
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Status> findByIdImage(@PathVariable Long id) {
+    public ResponseEntity<Image> findByIdImage(@PathVariable Long id) {
         return new ResponseEntity(imageService.findById(id), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Status> updateImage(@PathVariable Long id, @RequestBody Image image) {
+    public ResponseEntity<Image> updateImage(@PathVariable Long id, @RequestBody Image image) {
         Optional<Image> imageOptional = imageService.findById(id);
         if (!imageOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -53,12 +54,12 @@ public class ImageController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Status> deleteStatus(@PathVariable Long id) {
-        Optional<Status> imageOptional = imageService.findById(id);
+    public ResponseEntity deleteImage(@PathVariable Long id) {
+        Optional<Image> imageOptional = imageService.findById(id);
         if (!imageOptional.isPresent()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         imageService.remove(id);
-        return new ResponseEntity<>(imageOptional.get(), HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
