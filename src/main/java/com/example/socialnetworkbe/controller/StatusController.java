@@ -73,10 +73,17 @@ public class StatusController {
         }
         ArrayList<Iterable> result = new ArrayList<>();
         ArrayList<Optional<Status>> statuses = new ArrayList<>();
+        ArrayList<Integer> listNumberOfLike = new ArrayList<>();
         statuses.add(status);
         result.add(statuses);
         Iterable<Image> images = imageService.findAllByStatus(status.get().getId());
         result.add(images);
+        Integer numberOfLike = likeStatusService.findNumberOfLikeByStatus(status.get().getId());
+        if (numberOfLike == null) {
+            numberOfLike = 0;
+        }
+        listNumberOfLike.add(numberOfLike);
+        result.add(listNumberOfLike);
         return new ResponseEntity(result, HttpStatus.OK);
     }
 
