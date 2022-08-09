@@ -1,8 +1,10 @@
 package com.example.socialnetworkbe.controller;
 
 import com.example.socialnetworkbe.model.Comment;
+import com.example.socialnetworkbe.model.Image;
 import com.example.socialnetworkbe.model.Status;
 import com.example.socialnetworkbe.service.CommentService;
+import com.example.socialnetworkbe.service.LikeCommentService;
 import com.example.socialnetworkbe.service.StatusService;
 import com.example.socialnetworkbe.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Optional;
 
 @RestController
@@ -23,6 +26,8 @@ public class CommentController {
     UserService userService;
     @Autowired
     StatusService statusService;
+    @Autowired
+    LikeCommentService likeCommentService;
 
     @GetMapping
     public ResponseEntity<Iterable<Comment>> findAllComment() {
@@ -58,9 +63,20 @@ public class CommentController {
     }
 
     @GetMapping("/find-all-by-status")
-    public ResponseEntity<Iterable<Comment>> findAllByStatus(@RequestParam Long statusId) {
+    public ResponseEntity<ArrayList<?>> findAllByStatus(@RequestParam Long statusId) {
+        ArrayList<Iterable> result = new ArrayList<>();
         Iterable<Comment> listComment = commentService.findAllByStatus(statusId);
-        return new ResponseEntity<>(listComment, HttpStatus.OK);
+        result.add(listComment);
+        ArrayList<Integer> listNumberOfLike = new ArrayList<>();
+        for (Comment comment : listComment) {
+            Integer numberOfLike = likeCommentService.findNumberOfLikeCommentOfComment(comment.getId());
+            if (numberOfLike == null) {
+                numberOfLike = 0;
+            }
+            listNumberOfLike.add(numberOfLike);
+        }
+        result.add(listNumberOfLike);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

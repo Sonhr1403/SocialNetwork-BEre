@@ -40,4 +40,9 @@ public class LikeCommentServiceImpl implements LikeCommentService {
     public LikeComment findByUserLikeIdAndAndCommentId(Long idUser, Long idComment) {
         return likeCommentRepository.findByUserLikeIdAndAndCommentId(idUser,idComment);
     }
+
+    @Override
+    public Integer findNumberOfLikeCommentOfComment(Long commentId) {
+        return likeCommentRepository.findNumberOfLikeCommentOfComment(commentId);
+    }
 }
