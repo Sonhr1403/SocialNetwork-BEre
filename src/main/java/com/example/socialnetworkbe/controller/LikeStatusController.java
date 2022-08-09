@@ -26,7 +26,7 @@ public class LikeStatusController {
 
     private boolean checkLikeStatus(User user, Status status, Iterable<LikeStatus> likeStatuses) {
         for (LikeStatus i : likeStatuses) {
-            if (i.getStatus() == status && i.getUserLike() == user && i.getId()==null) {
+            if (i.getStatus() == status && i.getUserLike() == user && i.getId() == null) {
                 return false;
             }
         }
@@ -48,7 +48,17 @@ public class LikeStatusController {
                 likeStatusService.delete(likeStatuses.getId());
             }
         }
-        return new ResponseEntity<>(likeStatuses, HttpStatus.OK);
+        return new ResponseEntity<>(likeStatus, HttpStatus.OK);
     }
 
+    @GetMapping("/check")
+    public ResponseEntity check(@RequestParam Long idStatus, @RequestParam Long idUser) {
+        Status status = statusService.findById(idStatus).get();
+        User userOptional = userService.findById(idUser).get();
+        LikeStatus likeStatuses = likeStatusService.findByUserLikeIdAndAndStatusId(userOptional.getId(), status.getId());
+        if (likeStatuses == null) {
+            return new ResponseEntity(false, HttpStatus.OK);
+        } else
+            return new ResponseEntity<>(true, HttpStatus.OK);
+    }
 }
