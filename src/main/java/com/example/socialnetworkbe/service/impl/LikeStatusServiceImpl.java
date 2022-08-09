@@ -37,4 +37,9 @@ public class LikeStatusServiceImpl implements LikeStatusService {
     public LikeStatus findByUserLikeIdAndAndStatusId(Long userID, Long statusId) {
         return likeStatusRepository.findByUserLikeIdAndAndStatusId(userID,statusId);
     }
+
+    @Override
+    public Integer findNumberOfLikeByStatus(Long statusId) {
+        return likeStatusRepository.findNumberOfLikeByStatus(statusId);
+    }
 }

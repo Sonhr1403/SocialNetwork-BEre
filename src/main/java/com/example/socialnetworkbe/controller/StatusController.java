@@ -3,6 +3,7 @@ package com.example.socialnetworkbe.controller;
 import com.example.socialnetworkbe.model.Image;
 import com.example.socialnetworkbe.model.Status;
 import com.example.socialnetworkbe.service.ImageService;
+import com.example.socialnetworkbe.service.LikeStatusService;
 import com.example.socialnetworkbe.service.StatusService;
 import com.example.socialnetworkbe.service.UserService;
 import org.aspectj.asm.IRelationship;
@@ -26,6 +27,8 @@ public class StatusController {
     UserService userService;
     @Autowired
     ImageService imageService;
+    @Autowired
+    LikeStatusService likeStatusService;
 
     @GetMapping
     public ResponseEntity<ArrayList<?>> findAll(@RequestParam("currentId") Long currentId) {
@@ -39,11 +42,18 @@ public class StatusController {
         listStatus.addAll(statusStranger);
         result.add(listStatus);
         ArrayList<Iterable<Image>> listImage = new ArrayList<>();
+        ArrayList<Integer> listNumberOfLike = new ArrayList<>();
         for (Status status : listStatus) {
             Iterable<Image> images = imageService.findAllByStatus(status.getId());
             listImage.add(images);
+            Integer numberOfLike = likeStatusService.findNumberOfLikeByStatus(status.getId());
+            if (numberOfLike == null) {
+                numberOfLike = 0;
+            }
+            listNumberOfLike.add(numberOfLike);
         }
         result.add(listImage);
+        result.add(listNumberOfLike);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
@@ -56,8 +66,18 @@ public class StatusController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Status> findById(@PathVariable Long id) {
-        return new ResponseEntity(statusService.findById(id), HttpStatus.OK);
+    public ResponseEntity<ArrayList<?>> findById(@PathVariable Long id) {
+        Optional<Status> status = statusService.findById(id);
+        if (!status.isPresent()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        ArrayList<Iterable> result = new ArrayList<>();
+        ArrayList<Optional<Status>> statuses = new ArrayList<>();
+        statuses.add(status);
+        result.add(statuses);
+        Iterable<Image> images = imageService.findAllByStatus(status.get().getId());
+        result.add(images);
+        return new ResponseEntity(result, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
@@ -75,7 +95,7 @@ public class StatusController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Status> deleteStatus(@PathVariable Long id) {
+    public ResponseEntity<Status> deleteComment(@PathVariable Long id) {
         Optional<Status> statusOptional = statusService.findById(id);
         Status status = statusOptional.get();
         if (!statusOptional.isPresent()) {
@@ -92,11 +112,18 @@ public class StatusController {
         Iterable<Status> listStatus = statusService.findAllByOwner(id);
         result.add(listStatus);
         ArrayList<Iterable<Image>> listImage = new ArrayList<>();
+        ArrayList<Integer> listNumberOfLike = new ArrayList<>();
         for (Status status : listStatus) {
             Iterable<Image> images = imageService.findAllByStatus(status.getId());
             listImage.add(images);
+            Integer numberOfLike = likeStatusService.findNumberOfLikeByStatus(status.getId());
+            if (numberOfLike == null) {
+                numberOfLike = 0;
+            }
+            listNumberOfLike.add(numberOfLike);
         }
         result.add(listImage);
+        result.add(listNumberOfLike);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

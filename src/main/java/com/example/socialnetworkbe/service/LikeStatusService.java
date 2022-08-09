@@ -16,4 +16,5 @@ public interface LikeStatusService {
 
     LikeStatus findByUserLikeIdAndAndStatusId(Long userID,Long statusId);
 
+    Integer findNumberOfLikeByStatus(Long statusId);
 }
