@@ -15,4 +15,12 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
     @Modifying(clearAutomatically = true)
     @Query(value = "delete from image where status_id = :statusId", nativeQuery = true)
     void deleteAllByStatusId(@Param("statusId") Long statusId);
+
+    @Query(value = "select image.image,image.id,image.status_id from image join status s on s.id = image.status_id join user_table u on u.id = s.owner_id\n" +
+            "where u.id = :idUser order by s.create_at desc", nativeQuery = true)
+    Iterable<Image> findAllImageByUserId(@Param("idUser") Long idUser);
+
+    @Query(value = "select image.image,image.id,image.status_id from image join status s on s.id = image.status_id join user_table u on u.id = s.owner_id\n" +
+            "where u.id = :idUser order by s.create_at desc limit 5", nativeQuery = true)
+    Iterable<Image> top5ImageByUserId(@Param("idUser") Long idUser);
 }

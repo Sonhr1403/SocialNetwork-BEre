@@ -47,4 +47,14 @@ public class ImageServiceImpl implements ImageService<Image> {
     public void deleteAllByStatus(Long statusId) {
         imageRepository.deleteAllByStatusId(statusId);
     }
+
+    @Override
+    public Iterable<Image> findAllImageByUserId(Long idUser) {
+        return imageRepository.findAllImageByUserId(idUser);
+    }
+
+    @Override
+    public Iterable<Image> top5ImageByUserId(Long idUser) {
+        return imageRepository.top5ImageByUserId(idUser);
+    }
 }
