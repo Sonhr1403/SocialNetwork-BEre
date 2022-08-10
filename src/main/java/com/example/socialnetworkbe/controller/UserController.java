@@ -103,6 +103,9 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User user) {
+        if (!userService.isRegister(user)){
+            return new ResponseEntity<>("1", HttpStatus.NOT_FOUND);
+        }
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 
