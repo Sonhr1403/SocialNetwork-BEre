@@ -11,4 +11,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query(value = "select * from comment where status_id = :statusId and active <> 0\n" +
             "order by comment_id asc, create_at desc", nativeQuery = true)
     Iterable<Comment> findAllByStatus(@Param("statusId") Long id);
+
+    @Query(value = "select count(id) from comment where status_id = :id group by status_id", nativeQuery = true)
+    Integer findNumberOfComment(@Param("id") Long statusId);
 }

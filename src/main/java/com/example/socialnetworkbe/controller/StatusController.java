@@ -2,10 +2,7 @@ package com.example.socialnetworkbe.controller;
 
 import com.example.socialnetworkbe.model.Image;
 import com.example.socialnetworkbe.model.Status;
-import com.example.socialnetworkbe.service.ImageService;
-import com.example.socialnetworkbe.service.LikeStatusService;
-import com.example.socialnetworkbe.service.StatusService;
-import com.example.socialnetworkbe.service.UserService;
+import com.example.socialnetworkbe.service.*;
 import org.aspectj.asm.IRelationship;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,6 +26,8 @@ public class StatusController {
     ImageService imageService;
     @Autowired
     LikeStatusService likeStatusService;
+    @Autowired
+    CommentService commentService;
 
     @GetMapping
     public ResponseEntity<ArrayList<?>> findAll(@RequestParam("currentId") Long currentId) {
@@ -43,6 +42,7 @@ public class StatusController {
         result.add(listStatus);
         ArrayList<Iterable<Image>> listImage = new ArrayList<>();
         ArrayList<Integer> listNumberOfLike = new ArrayList<>();
+        ArrayList<Integer> listNumberOfComment = new ArrayList<>();
         for (Status status : listStatus) {
             Iterable<Image> images = imageService.findAllByStatus(status.getId());
             listImage.add(images);
@@ -51,9 +51,15 @@ public class StatusController {
                 numberOfLike = 0;
             }
             listNumberOfLike.add(numberOfLike);
+            Integer numberOfComment = commentService.findNumberOfComment(status.getId());
+            if (numberOfComment == null) {
+                numberOfComment = 0;
+            }
+            listNumberOfComment.add(numberOfComment);
         }
         result.add(listImage);
         result.add(listNumberOfLike);
+        result.add(listNumberOfComment);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
@@ -121,6 +127,7 @@ public class StatusController {
         result.add(listStatus);
         ArrayList<Iterable<Image>> listImage = new ArrayList<>();
         ArrayList<Integer> listNumberOfLike = new ArrayList<>();
+        ArrayList<Integer> listNumberOfComment = new ArrayList<>();
         for (Status status : listStatus) {
             Iterable<Image> images = imageService.findAllByStatus(status.getId());
             listImage.add(images);
@@ -129,9 +136,15 @@ public class StatusController {
                 numberOfLike = 0;
             }
             listNumberOfLike.add(numberOfLike);
+            Integer numberOfComment = commentService.findNumberOfComment(status.getId());
+            if (numberOfComment == null) {
+                numberOfComment = 0;
+            }
+            listNumberOfComment.add(numberOfComment);
         }
         result.add(listImage);
         result.add(listNumberOfLike);
+        result.add(listNumberOfComment);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

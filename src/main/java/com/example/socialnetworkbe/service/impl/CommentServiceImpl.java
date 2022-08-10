@@ -41,4 +41,9 @@ public class CommentServiceImpl implements CommentService<Comment> {
     public Iterable<Comment> findAllByStatus(Long statusId) {
         return commentRepository.findAllByStatus(statusId);
     }
+
+    @Override
+    public Integer findNumberOfComment(Long statusId) {
+        return commentRepository.findNumberOfComment(statusId);
+    }
 }

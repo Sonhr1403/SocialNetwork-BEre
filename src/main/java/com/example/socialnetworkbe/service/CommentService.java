@@ -1,5 +1,7 @@
 package com.example.socialnetworkbe.service;
 
+import org.springframework.data.repository.query.Param;
+
 import java.util.Optional;
 
 public interface CommentService <T>{
@@ -12,4 +14,6 @@ public interface CommentService <T>{
     void remove(Long id);
 
     Iterable<T> findAllByStatus(Long statusId);
+
+    Integer findNumberOfComment(Long statusId);
 }
