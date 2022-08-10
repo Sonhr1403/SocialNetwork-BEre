@@ -15,4 +15,6 @@ public interface ImageService<T> {
     void remove(Long id);
 
     Iterable<Image> findAllByStatus(Long id);
+
+    void deleteAllByStatus(Long statusId);
 }
