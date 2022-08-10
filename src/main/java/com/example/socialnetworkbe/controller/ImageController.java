@@ -62,4 +62,14 @@ public class ImageController {
         imageService.remove(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("{idUser}/find-all-image-by-user")
+    public ResponseEntity<Iterable<Image>> findAllImageByUserId(@PathVariable("idUser") Long idUser){
+        return new ResponseEntity(imageService.findAllImageByUserId(idUser),HttpStatus.OK);
+    }
+
+    @GetMapping("{idUser}/top5-image-by-user")
+    public ResponseEntity<Iterable<Image>> top5ImageByUserId(@PathVariable("idUser") Long idUser){
+        return new ResponseEntity(imageService.top5ImageByUserId(idUser),HttpStatus.OK);
+    }
 }
