@@ -40,4 +40,14 @@ public class ImageServiceImpl implements ImageService<Image> {
     public Iterable<Image> findAllByStatus(Long id) {
         return imageRepository.findAllByStatus(id);
     }
+
+    @Override
+    public Iterable<Image> findAllImageByUserId(Long idUser) {
+        return imageRepository.findAllImageByUserId(idUser);
+    }
+
+    @Override
+    public Iterable<Image> top5ImageByUserId(Long idUser) {
+        return imageRepository.top5ImageByUserId(idUser);
+    }
 }
